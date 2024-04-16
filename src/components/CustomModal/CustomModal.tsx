@@ -10,11 +10,11 @@ interface ModalProps {
 
 const CustomModal: React.FC<ModalProps> = ({ open, onClose, title, children }) => {
     return (
-        <Dialog open={open} onClose={onClose} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <DialogTitle sx={{ textAlign: 'center',fontSize:'24px',fontWeight:700 }}>{title}</DialogTitle>
+        <Dialog open={open} onClose={onClose} data-testid="custom-modal" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <DialogTitle data-testid="modal-title" sx={{ textAlign: 'center',fontSize:'24px',fontWeight:700 }}>{title}</DialogTitle>
             <DialogContent>{children}</DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Close</Button>
+                <Button data-testid="modal-button" onClick={onClose}>Close</Button>
             </DialogActions>
         </Dialog>
     );

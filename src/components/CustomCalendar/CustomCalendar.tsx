@@ -12,11 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError, setWorkouts } from "@/store/workoutSlice";
 import { AddExercise } from "../Exercise/AddExercise";
 
-interface Exercise {
-    id: string;
-    title: string;
-}
-
 const dateLogic = (dateString: string) => {
     const inputDate = new Date(dateString);
     const year = inputDate.getFullYear();
@@ -122,16 +117,16 @@ const CalendarPage = (props: any) => {
             alert('Cannot add duplicate workout');
             return;
         }
-        debugger;
+        
 
         // Add the workouts
         const addedData = await addWorkoutMutation(updatedEvent);
         const updatedExercises = updatedEvent?.exercises;
 
         console.log('data of exercises ', allExercises);
-        debugger;
+        
         const { exercisesmodels } = allExercises?.data;
-        debugger;
+        
 
         // Associate exercises with the workout 
         const associatedExercises = await Promise.all(exercisesmodels?.map(async (result: any) => {
@@ -162,7 +157,7 @@ const CalendarPage = (props: any) => {
         //     alert('Cannot add duplicate workout');
         //     return; 
         // }
-        debugger;
+        
         return (
             <Fragment>
                 <h2>{arg?.event?.title}</h2>

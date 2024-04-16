@@ -56,7 +56,7 @@ export const AddExercise = (props: any) => {
 
             console.log("create result ", resultData);
             console.log('Workout selected ', props?.workoutSelected);
-            debugger;
+            
             if (resultData === null) {
                 return alert('Exercise is already added');
             }
