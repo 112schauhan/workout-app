@@ -94,9 +94,10 @@ export const AddExercise = (props: any) => {
                         label="Exercise Name"
                         onChange={handleExerciseContentChange}
                         margin="normal"
+                        data-testid={"exercise-name-textfield"}
                         value={enterExercise}
                     />
-                    <IconButton aria-label="add" onClick={associateExercise}>
+                    <IconButton aria-label="add" onClick={associateExercise} data-testid={"Add Exercise"}>
                         <AddCircle />
                     </IconButton>
                 </Grid>

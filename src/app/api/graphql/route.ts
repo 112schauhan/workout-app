@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 // app.use(cors(corsOptions));
 
 const uri = process.env.BACKEND_URL;
-const connectDB = async () => {
+export const connectDB = async () => {
     try {
         if (uri) {
             await mongoose.connect(uri, {

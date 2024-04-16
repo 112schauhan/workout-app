@@ -81,6 +81,7 @@ const AddWorkout = (props: any) => {
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
+                    data-testid={"workout-name-textfield"}
                     sx={{
                         marginBottom: '20px'
                     }}
