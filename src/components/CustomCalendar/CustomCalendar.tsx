@@ -11,6 +11,7 @@ import { ADD_EXERCISE_TO_WORKOUT, ADD_WORKOUT, ASSOCIATE_EXERCISE_TO_WORKOUT } f
 import { useDispatch, useSelector } from "react-redux";
 import { setError, setWorkouts } from "@/store/workoutSlice";
 import { AddExercise } from "../Exercise/AddExercise";
+import { Typography } from "@mui/material";
 
 const dateLogic = (dateString: string) => {
     const inputDate = new Date(dateString);
@@ -90,18 +91,6 @@ const CalendarPage = (props: any) => {
         return data;
     }
 
-    const addExercisesMutation = async (workoutId: any, enterExercise: string) => {
-        const { data } = await addExerciseToWorkout({
-            variables: {
-                input: {
-                    id: workoutId,
-                    title: enterExercise,
-                },
-            },
-        });
-
-        return data;
-    }
     const handleProgramEdit = async (arg: any) => {
         // Update the event's start and end dates when dropped
         const updatedEvent: any = {
@@ -121,13 +110,8 @@ const CalendarPage = (props: any) => {
 
         // Add the workouts
         const addedData = await addWorkoutMutation(updatedEvent);
-        const updatedExercises = updatedEvent?.exercises;
-
-        console.log('data of exercises ', allExercises);
-        
         const { exercisesmodels } = allExercises?.data;
         
-
         // Associate exercises with the workout 
         const associatedExercises = await Promise.all(exercisesmodels?.map(async (result: any) => {
             return await associateExerciseToWorkout({
@@ -160,10 +144,10 @@ const CalendarPage = (props: any) => {
         
         return (
             <Fragment>
-                <h2>{arg?.event?.title}</h2>
-                <ul style={{ listStyleType: 'disc', textAlign: 'center' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight:500, borderBottom:'0.5px solid #FFF'}}>{arg?.event?.title}</Typography>
+                <ul style={{ listStyleType: 'none', textAlign: 'right' }}>
                     {arg?.event?.extendedProps?.exercises?.map((exercise: any) => {
-                        return <li key={exercise?.id}>{exercise?.title}</li>;
+                        return <Typography variant="subtitle2" sx={{ fontWeight:400,fontSize:'12px'}}key={exercise?.id}>{exercise?.title}</Typography>;
                     })}
                 </ul>
                 {/* <button onClick={addExercise}>Add Exercises</button> */}

@@ -45,3 +45,7 @@ body {
 .fc-theme-standard th {
   cursor: pointer;
 }
+
+.fc-daygrid-event{
+  padding:2px 4px;
+}
