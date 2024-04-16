@@ -30,7 +30,7 @@ const AddWorkout = (props: any) => {
         e.preventDefault();
         // Handle form submission here
         if (!formData?.workoutTitle) {
-            alert("Title is required");
+            return alert("Title is required");
         }
         const dataSubmit = {
             title: formData?.workoutTitle,

@@ -52,6 +52,9 @@ export const AddExercise = (props: any) => {
 
     const associateExercise = async () => {
         try {
+            if(enterExercise === ""){
+                return alert('Please pass a value');
+            }
             const resultData = await createExercise();
 
             console.log("create result ", resultData);
@@ -69,6 +72,8 @@ export const AddExercise = (props: any) => {
                 refetchQueries: [{ query: GET_WORKOUTS }]
             });
 
+            props?.handleCloseModal();
+
             return data;
         } catch (error) {
             console.log('Error caught ', error);
@@ -81,12 +86,11 @@ export const AddExercise = (props: any) => {
     return (
         <CustomModal open={props?.openModal} onClose={props?.handleCloseModal} title="Add Exercises">
             <form>
-                <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 500 }}>Add Exercises</Typography>
-                <ul>
+                {/* <ul>
                     {exercisesTitle?.map((exercise: any, index: number) => {
                         return <li key={index}>{exercise?.title}</li>
                     })}
-                </ul>
+                </ul> */}
 
                 <Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}>
                     <TextField
