@@ -9,30 +9,24 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_EXERCISES, GET_WORKOUTS } from "@/app/api/graphql/queries/getAllWorkouts";
 import { ADD_EXERCISE_TO_WORKOUT, ADD_WORKOUT, ASSOCIATE_EXERCISE_TO_WORKOUT } from "@/app/api/graphql/queries/addWorkouts";
 import { useDispatch, useSelector } from "react-redux";
-import { setError, setWorkouts } from "@/store/workoutSlice";
+import { setError, setExercises, setWorkouts } from "@/store/workoutSlice";
 import { AddExercise } from "../Exercise/AddExercise";
 import { Typography } from "@mui/material";
-
-const dateLogic = (dateString: string) => {
-    const inputDate = new Date(dateString);
-    const year = inputDate.getFullYear();
-    const month = String(inputDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day = String(inputDate.getDate()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
-}
-
+import WorkoutList from "../Workout/WorkoutList";
+import { dateLogic } from "@/utils/dateLogic";
+import Loader from "../UI/Loader";
 const CalendarPage = (props: any) => {
-    const { data } = useQuery(GET_WORKOUTS, { client });
+    const { loading,data } = useQuery(GET_WORKOUTS, { client });
+    const exercisesData = useQuery(GET_ALL_EXERCISES, { client });
     const [mutateFunction] = useMutation(ADD_WORKOUT, { client });
     const dispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false);
     const [openExerciseModal, setOpenExerciseModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<any>();
-    const [addExerciseToWorkout] = useMutation(ADD_EXERCISE_TO_WORKOUT, { client });
+    // const [addExerciseToWorkout] = useMutation(ADD_EXERCISE_TO_WORKOUT, { client });
     const [associateExerciseToWorkout] = useMutation(ASSOCIATE_EXERCISE_TO_WORKOUT, { client });
     const allExercises = useQuery(GET_ALL_EXERCISES, { client });
+    const [handleWorkoutDetails, setHandleWorkoutDetails] = useState(false);
 
 
     const handleOpenModal = () => {
@@ -61,7 +55,17 @@ const CalendarPage = (props: any) => {
 
             dispatch(setWorkouts(updatedModels));
         }
-    }, [data, dispatch]);
+
+        if (exercisesData) {
+            let exerciseModels = exercisesData?.data?.exercisesmodels;
+            let updatedModels = exerciseModels?.map((item: any) => ({
+                ...item,
+                date: dateLogic(item?.date)
+            }));
+
+            dispatch(setExercises(updatedModels));
+        }
+    }, [data, dispatch, exercisesData]);
 
     const [clickedDate, setClickedDate] = useState("");
     const handleProgramSelection = (selectInfo?: any) => {
@@ -72,7 +76,7 @@ const CalendarPage = (props: any) => {
             title: selectInfo?.event?.title
         }
         setSelectedWorkout(workoutSelected)
-        handleExerciseOpenModal();
+        setHandleWorkoutDetails(true);
     };
 
     const { workouts } = useSelector((state: any) => state.workout);
@@ -100,18 +104,17 @@ const CalendarPage = (props: any) => {
         };
 
         //Check if workout is already present
-        console.log('Workouts data ', workouts);
         const duplicateWorkout = workouts?.filter((workout: any) => (workout?.date === arg?.event?.startStr && workout?.title === arg?.event?.title));
         if (duplicateWorkout?.length > 0) {
             alert('Cannot add duplicate workout');
             return;
         }
-        
+
 
         // Add the workouts
         const addedData = await addWorkoutMutation(updatedEvent);
         const { exercisesmodels } = allExercises?.data;
-        
+
         // Associate exercises with the workout 
         const associatedExercises = await Promise.all(exercisesmodels?.map(async (result: any) => {
             return await associateExerciseToWorkout({
@@ -119,7 +122,7 @@ const CalendarPage = (props: any) => {
                     exerciseId: result?.id,
                     workoutId: addedData?.addWorkout?._id,
                 },
-                refetchQueries: [GET_WORKOUTS]
+                refetchQueries: [{query:GET_WORKOUTS}]
             })
         }));
     };
@@ -141,17 +144,11 @@ const CalendarPage = (props: any) => {
         //     alert('Cannot add duplicate workout');
         //     return; 
         // }
-        
+
         return (
-            <Fragment>
-                <Typography variant="subtitle1" sx={{ fontWeight:500, borderBottom:'0.5px solid #FFF'}}>{arg?.event?.title}</Typography>
-                <ul style={{ listStyleType: 'none', textAlign: 'right' }}>
-                    {arg?.event?.extendedProps?.exercises?.map((exercise: any) => {
-                        return <Typography variant="subtitle2" sx={{ fontWeight:400,fontSize:'12px'}}key={exercise?.id}>{exercise?.title}</Typography>;
-                    })}
-                </ul>
-                {/* <button onClick={addExercise}>Add Exercises</button> */}
-            </Fragment>
+            <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 500, marginBottom: '8px', fontSize: 'clamp(8px, 2vw, 16px)',textWrap:'wrap' }}>{arg?.event?.title}</Typography>
         );
     };
 
@@ -182,6 +179,7 @@ const CalendarPage = (props: any) => {
 
     return (
         <Fragment>
+            {loading && <Loader loading={loading}/>}
             {
                 openModal && <AddWorkout workoutSelected={selectedWorkout?._id} clickedDate={clickedDate} openModal={openModal} handleCloseModal={handleCloseModal} handleOpenModal={handleOpenModal} />
             }
@@ -190,6 +188,14 @@ const CalendarPage = (props: any) => {
                     openModal={openExerciseModal} handleCloseModal={handleCloseExerciseModal}
                     handleOpenModal={handleExerciseOpenModal}
                     workoutSelected={selectedWorkout}
+                />
+            }
+            {
+                handleWorkoutDetails && <WorkoutList
+                    setHandleWorkoutDetails={setHandleWorkoutDetails}
+                    handleWorkoutDetails={handleWorkoutDetails}
+                    selectedWorkout={selectedWorkout}
+                    setOpenExerciseModal={setOpenExerciseModal}
                 />
             }
             <FullCalendar

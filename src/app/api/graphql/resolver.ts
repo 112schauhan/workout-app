@@ -25,7 +25,7 @@ export const resolvers = {
             } catch (err: any) {
                 throw new Error(err);
             }
-        }
+        },
         // Add more query resolvers as needed
     },
     Mutation: {

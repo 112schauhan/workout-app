@@ -33,6 +33,7 @@ body {
 .fc-direction-ltr {
   height: 100%;
   padding: 2%;
+  background-image: linear-gradient(45deg, #ACB6E5, #74ebd5);
 }
 
 .fc .fc-toolbar.fc-header-toolbar {
@@ -41,11 +42,19 @@ body {
   justify-content: space-evenly;
 }
 
+.fc-toolbar-title {
+  font-weight: 600;
+}
+
 .fc-theme-standard td,
 .fc-theme-standard th {
   cursor: pointer;
 }
 
-.fc-daygrid-event{
-  padding:2px 4px;
+.fc-daygrid-event {
+  padding: 2px 4px;
+}
+
+.fc-daygrid-day-top {
+  justify-content: center;
 }
