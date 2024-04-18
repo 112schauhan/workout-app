@@ -3,7 +3,7 @@ import RingLoader from "react-spinners/RingLoader";
 const Loader = ({ loading }: { loading: boolean }) => {
     const override: CSSProperties = {
         position: 'fixed',
-        top: '50%',
+        top: '30%',
         left: '50%'
     };
 

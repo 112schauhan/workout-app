@@ -15,7 +15,7 @@ const CustomModal: React.FC<ModalProps> = ({ open, onClose, title, children }) =
         <Dialog open={open}
             onClose={onClose}
             data-testid="custom-modal"
-            sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px', maxHeight: '900px' }}
+            sx={{ position: 'fixed', top: '5%', left: '20%', display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px', maxHeight: '900px' }}
             TransitionComponent={Transition}
         >
             <DialogActions sx={{ justifyContent: 'flex-end', position: 'absolute', top: 0, right: 0, scale: '0.8', padding: '2px' }}>
