@@ -113,10 +113,8 @@ const CalendarPage = (props: any) => {
 
         // Add the workouts
         const addedData = await addWorkoutMutation(updatedEvent);
-        const { exercisesmodels } = allExercises?.data;
-
         // Associate exercises with the workout 
-        const associatedExercises = await Promise.all(exercisesmodels?.map(async (result: any) => {
+        const associatedExercises = await Promise.all(updatedEvent?.exercises?.map(async (result: any) => {
             return await associateExerciseToWorkout({
                 variables: {
                     exerciseId: result?.id,
