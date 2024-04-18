@@ -7,7 +7,7 @@ const Loader = ({ loading }: { loading: boolean }) => {
         left: '50%'
     };
 
-    return <RingLoader color="#8a74eb" loading={loading} cssOverride={override} size={150} />
+    return <RingLoader color="#8a74eb" loading={loading} cssOverride={override} size={150} data-testid="loader"/>
 
 }
 

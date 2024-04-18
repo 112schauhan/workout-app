@@ -32,7 +32,7 @@ const WorkoutList = ({ handleWorkoutDetails, setHandleWorkoutDetails, selectedWo
                     })
                 }
             </List>
-            <Button onClick={generateExerciseWindow} sx={{width:'100%'}} variant="outlined">Add More</Button>
+            <Button onClick={generateExerciseWindow} sx={{ width: '100%' }} variant="outlined" data-testid="add-exercise">Add More</Button>
         </CustomModal>
     )
 }

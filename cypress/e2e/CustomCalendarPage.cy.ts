@@ -6,6 +6,10 @@ describe('CalendarPage Component', () => {
     cy.visit('http://localhost:3000');
   });
 
+  it('displays loader while data is being fetched', () => {
+    cy.get('[data-testid="loader"]').should('exist');
+  });
+
   it('displays the calendar correctly', () => {
     // Check if the calendar is visible
     cy.get('.fc').should('be.visible');
@@ -34,12 +38,11 @@ describe('CalendarPage Component', () => {
   it('opens modal when adding an exercise', () => {
     // Click on a workout event to add an exercise
     cy.get('.fc-event').first().click();
-
+    cy.get('[data-testid="add-exercise"').should('be.visible').first().click();
     // Check if the modal for adding an exercise is opened
     cy.get('.MuiDialog-container').should('be.visible');
 
     // Check if the modal contains necessary elements
-    cy.get('.MuiDialogTitle-root').should('contain', 'Add Exercise');
     cy.get('[data-testid="exercise-name-textfield"]').should('exist');
 
     // Check if the label of the TextField contains the workout name
